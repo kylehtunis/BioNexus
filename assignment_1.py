@@ -11,6 +11,7 @@ plt.style.use("ggplot")
 
 DEFAULT_DATA_FILE = "Kinetics.csv"
 
+######## Part 1 ########
 
 @dataclass
 class KineticResult:
@@ -374,6 +375,10 @@ def main() -> None:
     else:
         batch = compute_batch_reactor_time(results[0].km, results[0].vmax)
         print_batch_reactor_time(batch)
+
+
+
+####### Part 2 ########
 
 
 if __name__ == "__main__":
