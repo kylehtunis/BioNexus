@@ -380,6 +380,44 @@ def main() -> None:
 
 ####### Part 2 ########
 
+def plot_phase(v6max=0.66, D=0.33):
+    fig, ax = plt.subplots(figsize=(5, 6))
+    plt.title(r"$v_1$ vs $v_6$ phase plot" )
+
+    ax.set_ylabel(r"$v_6$")
+    ax.set_xlabel(r"$v_1$")
+    ax.set_ylim(-1, 1)
+    ax.set_yticks([-v6max, 0, D, v6max])
+    ax.set_yticklabels([r"$-v_{6,max}$", "0", r"$D$", r"$v_{6,max}$"])
+    ax.set_xlim(-.1, 1)
+    ax.set_xticks([0, D])
+    ax.set_xticklabels(["0", r"$D$"])
+    ax.hlines(0, -1, 1, 'k', linestyles="dashed")
+    ax.vlines(0, -1, 1, 'k', linestyles="dashed")
+
+    # v_6 = v_1
+    ax.plot(np.linspace(-1, 1, 10), np.linspace(-1, 1, 10), 'k')
+    ax.text(0.4, 0.34, r"$v_6 = v_1$")
+
+    # D + v_1 = v_6
+    ax.plot(np.linspace(-1, 1, 10), np.linspace(-1+D, 1+D, 10), 'k')
+    ax.text(0.23, 0.51+D, r"$D + v_1 = v_6$")
+
+    # v_max
+    ax.hlines(v6max, -1, 1, 'k')
+    ax.vlines(D, -1, 1, 'k')
+
+    # fill
+    x = np.linspace(0, 1, 100)
+    x = np.clip(x, D, np.inf)
+    print(x)
+    y1 = np.array([i if i < v6max else v6max for i in np.linspace(D , 1 + D, 100)])
+    y2 = np.array([i if i < v6max else v6max for i in np.linspace(0 , 1, 100)])
+
+    ax.fill_between(x, y1, y2)
+    plt.savefig("phaseplot.pdf")
+
 
 if __name__ == "__main__":
     main()
+    plot_phase(0.6, 0.17)
