@@ -109,13 +109,16 @@ def main():
     plt.title("Phase Plane")
     plt.show()
     # part 2 stream plot
-    R, E = np.mgrid[0:2:.1, 0:2:.1]
+    E, R = np.mgrid[-1:3:.1, -1:3:.1]
     dR_dt, dE_dt = downstream_ode(0, (R, E), (2, 1.1, 1, 0.9))
     print(R[0], E[0])
-    plt.streamplot(R[:,0], E[0], dR_dt, dE_dt)
+    plt.streamplot(R[0], E[:,0], dR_dt, dE_dt)
     plt.xlabel("R")
     plt.ylabel("E")
+    plt.plot(0, 0, 'bo', label="Fixed Point 1")
+    plt.plot(10/9, 20/11, 'ro', label="Fixed Point 2")
     plt.title("Stream Plot")
+    plt.legend(loc='upper left')
     plt.show()
 
 if __name__ == "__main__":
