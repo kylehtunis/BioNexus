@@ -81,6 +81,7 @@ def solve_and_plot(func, initial, params, t_max, timestep):
     plt.plot(time, sol.y[1], label="E")
     plt.legend()
     plt.show()
+    return sol
 
 # ODE 
 def main():
@@ -99,8 +100,23 @@ def main():
     print(viterbi(patient_beta, Initial, Emissions, Transitions, state=-1))
     patient_alpha_ODE(.1, 50)
 
-    # part 2
-    solve_and_plot(downstream_ode, (1.0, 0.5), (2, 1.1, 1, 0.9), 20, 0.1)
+    # part 2 ode
+    sol = solve_and_plot(downstream_ode, (1.0, 0.5), (2, 1.1, 1, 0.9), 20, 0.1)
+    # part 2 phase plot
+    plt.plot(sol.y[0], sol.y[1])
+    plt.xlabel("R")
+    plt.ylabel("E")
+    plt.title("Phase Plane")
+    plt.show()
+    # part 2 stream plot
+    R, E = np.mgrid[0:2:.1, 0:2:.1]
+    dR_dt, dE_dt = downstream_ode(0, (R, E), (2, 1.1, 1, 0.9))
+    print(R[0], E[0])
+    plt.streamplot(R[:,0], E[0], dR_dt, dE_dt)
+    plt.xlabel("R")
+    plt.ylabel("E")
+    plt.title("Stream Plot")
+    plt.show()
 
 if __name__ == "__main__":
     main()
