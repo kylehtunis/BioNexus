@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from scipy.integrate import solve_ivp
 
 sns.set_theme()
 
@@ -67,6 +67,21 @@ def patient_alpha_ODE(timestep, t_max):
     plt.plot(protein_a, protein_b)
     plt.show()
 
+def downstream_ode(t, initial, params):
+    R, E = initial
+    alpha, beta, gamma, delta = params
+    dR_dt = alpha * R - beta * R * E
+    dE_dt = -gamma * E + delta * R * E
+    return (dR_dt, dE_dt)
+
+def solve_and_plot(func, initial, params, t_max, timestep):
+    time = np.linspace(0, t_max, int(t_max / timestep))
+    sol = solve_ivp(func, (0, t_max), initial, args=(params,), t_eval=time)
+    plt.plot(time, sol.y[0], label="R")
+    plt.plot(time, sol.y[1], label="E")
+    plt.legend()
+    plt.show()
+
 # ODE 
 def main():
     Initial = np.array([.5, .5])
@@ -83,6 +98,9 @@ def main():
     print(viterbi(patient_alpha, Initial, Emissions, Transitions, state=-1))
     print(viterbi(patient_beta, Initial, Emissions, Transitions, state=-1))
     patient_alpha_ODE(.1, 50)
+
+    # part 2
+    solve_and_plot(downstream_ode, (1.0, 0.5), (2, 1.1, 1, 0.9), 20, 0.1)
 
 if __name__ == "__main__":
     main()
