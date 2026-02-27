@@ -63,7 +63,6 @@ def patient_alpha_ODE(timestep, t_max):
     plt.plot(protein_a, protein_b)
     plt.show()
 
-<<<<<<< HEAD
 def hill(p, theta, n):
     return p**n / (p**n + theta**n)
 
@@ -166,7 +165,6 @@ def SDEVelo(timestep, t_max, ngens=50):
 
 
 
-=======
 def downstream_ode(t, initial, params):
     R, E = initial
     alpha, beta, gamma, delta = params
@@ -184,7 +182,6 @@ def solve_and_plot(func, initial, params, t_max, timestep):
     return sol
 
 # ODE 
->>>>>>> 581fa085a5cffa216e10f2619ef9bd9d32a91c13
 def main():
     Initial = np.array([.5, .5])
     Emissions = np.array([
