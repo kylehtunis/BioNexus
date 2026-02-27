@@ -1338,7 +1338,7 @@ def plot_lotka_volterra_stream(params, fp, save_path=None):
     fig, ax = plt.subplots(figsize=(8, 7))
 
     # Vector field
-    R_grid, E_grid = np.meshgrid(np.linspace(0.01, 4, 40), np.linspace(0.01, 4, 40))
+    R_grid, E_grid = np.meshgrid(np.linspace(-1, 4, 50), np.linspace(-1, 4, 50))
     dR = alpha * R_grid - beta * R_grid * E_grid
     dE = -gamma * E_grid + delta * R_grid * E_grid
     speed = np.sqrt(dR**2 + dE**2)
@@ -1355,14 +1355,22 @@ def plot_lotka_volterra_stream(params, fp, save_path=None):
     )
 
     # Nullclines
-    R_vals = np.linspace(0.01, 4, 200)
+    R_vals = np.linspace(-1, 4, 200)
     # dR/dt = 0 → E = α/β (horizontal line)
     ax.axhline(
         y=alpha / beta,
         color="#e74c3c",
         ls="--",
         linewidth=2,
-        label=f"R-nullcline: E = α/β = {alpha/beta:.2f}",
+        label=f"$\\frac{{dR}}{{dt}} = 0$ nullcline: $E = \\frac{{\\alpha}}{{\\beta}}$ = {alpha/beta:.2f}",
+    )
+    # dR/dt = 0 → R = 0 (horizontal line)
+    ax.axhline(
+        y=0,
+        color="#e74c3c",
+        ls="--",
+        linewidth=2,
+        label=f"$\\frac{{dR}}{{dt}} = 0$ nullcline: $E = 0$",
     )
     # dE/dt = 0 → R = γ/δ (vertical line)
     ax.axvline(
@@ -1370,7 +1378,15 @@ def plot_lotka_volterra_stream(params, fp, save_path=None):
         color="#2980b9",
         ls="--",
         linewidth=2,
-        label=f"E-nullcline: R = γ/δ = {gamma/delta:.2f}",
+        label=f"$\\frac{{dE}}{{dt}} = 0$ nullcline: $R = \\frac{{\\gamma}}{{\\delta}}$ = {gamma/delta:.2f}",
+    )
+    # dE/dt = 0 → E = 0 (vertical line)
+    ax.axvline(
+        x=0,
+        color="#2980b9",
+        ls="--",
+        linewidth=2,
+        label=f"$\\frac{{dE}}{{dt}} = 0$ nullcline: $R = 0$",
     )
 
     # Fixed points
@@ -1388,8 +1404,8 @@ def plot_lotka_volterra_stream(params, fp, save_path=None):
     ax.set_ylabel("E (Enzyme) [M]")
     ax.set_title("Lotka-Volterra: Stream Plot with Nullclines")
     ax.legend(loc="upper right", fontsize=9)
-    ax.set_xlim(0, 4)
-    ax.set_ylim(0, 4)
+    ax.set_xlim(-1, 4)
+    ax.set_ylim(-1, 4)
     plt.tight_layout()
     _save(fig, save_path)
     return fig
