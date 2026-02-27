@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
 import seaborn as sns
-
+from scipy.integrate import solve_ivp
 
 sns.set_theme()
 
@@ -63,6 +63,7 @@ def patient_alpha_ODE(timestep, t_max):
     plt.plot(protein_a, protein_b)
     plt.show()
 
+<<<<<<< HEAD
 def hill(p, theta, n):
     return p**n / (p**n + theta**n)
 
@@ -165,6 +166,25 @@ def SDEVelo(timestep, t_max, ngens=50):
 
 
 
+=======
+def downstream_ode(t, initial, params):
+    R, E = initial
+    alpha, beta, gamma, delta = params
+    dR_dt = alpha * R - beta * R * E
+    dE_dt = -gamma * E + delta * R * E
+    return (dR_dt, dE_dt)
+
+def solve_and_plot(func, initial, params, t_max, timestep):
+    time = np.linspace(0, t_max, int(t_max / timestep))
+    sol = solve_ivp(func, (0, t_max), initial, args=(params,), t_eval=time)
+    plt.plot(time, sol.y[0], label="R")
+    plt.plot(time, sol.y[1], label="E")
+    plt.legend()
+    plt.show()
+    return sol
+
+# ODE 
+>>>>>>> 581fa085a5cffa216e10f2619ef9bd9d32a91c13
 def main():
     Initial = np.array([.5, .5])
     Emissions = np.array([
@@ -181,6 +201,27 @@ def main():
     print(viterbi(patient_beta, Initial, Emissions, Transitions, state=-1))
     # patient_alpha_ODE(.1, 50)
     SDEVelo(.01, 20)
+
+    # part 2 ode
+    sol = solve_and_plot(downstream_ode, (1.0, 0.5), (2, 1.1, 1, 0.9), 20, 0.1)
+    # part 2 phase plot
+    plt.plot(sol.y[0], sol.y[1])
+    plt.xlabel("R")
+    plt.ylabel("E")
+    plt.title("Phase Plane")
+    plt.show()
+    # part 2 stream plot
+    E, R = np.mgrid[-1:3:.1, -1:3:.1]
+    dR_dt, dE_dt = downstream_ode(0, (R, E), (2, 1.1, 1, 0.9))
+    print(R[0], E[0])
+    plt.streamplot(R[0], E[:,0], dR_dt, dE_dt)
+    plt.xlabel("R")
+    plt.ylabel("E")
+    plt.plot(0, 0, 'bo', label="Fixed Point 1")
+    plt.plot(10/9, 20/11, 'ro', label="Fixed Point 2")
+    plt.title("Stream Plot")
+    plt.legend(loc='upper left')
+    plt.show()
 
 if __name__ == "__main__":
     main()
